@@ -21,31 +21,72 @@ const TikTokIcon = ({ className }) => (
 );
 
 // ==========================================
-// ⚙️ НАСТРОЙКИ КОНТЕНТА (МЕНЯТЬ ТЕКСТ, ФОТО И ССЫЛКИ ЗДЕСЬ)
+// ⚙️ НАСТРОЙКИ КОНТЕНТА (ОСНОВНЫЕ ДАННЫЕ)
 // ==========================================
 const CONTENT = {
-  bgImage: '/bg-blogger.webp', // ФОН: файл bg-blogger.jpg в папке public
-  avatar: '/avatar-blogger.webp', // АВАТАР: файл avatar-blogger.jpg в папке public
-  badge: 'В эфире',
+  bgImage: '/bg-blogger.webp',
+  avatar: '/avatar-blogger.webp',
   name1: 'ALEX',
   name2: 'NEO',
-  role: 'Лайфстайл Креатор',
   username: '@alexneo_real',
-  subUsername: 'Контент Креатор',
-  tags: ['Лайфстайл', 'Влоги', 'Мода & Стиль'],
   stat1Title: 'YouTube',
   stat1Value: '850K',
   stat2Title: 'Instagram',
   stat2Value: '1.2M',
-  quote1: 'Открыт для сотрудничества',
-  quote2: 'и медиа',
-  actionText: 'Написать',
   actionLink: 'https://t.me/твой_юзернейм?text=Привет!%20По%20поводу%20рекламы',
   youtubeLink: 'https://youtube.com/',
   tiktokLink: 'https://tiktok.com/',
   tgLink: 'https://t.me/твой_юзернейм',
   tgChannelLink: 'https://t.me/твой_канал',
   instLink: 'https://instagram.com/твой_юзернейм'
+};
+
+// ==========================================
+// 🌍 ПЕРЕВОДЫ КОНТЕНТА И ИНТЕРФЕЙСА
+// ==========================================
+const TRANSLATIONS = {
+  RU: {
+    badge: 'В эфире',
+    role: 'Лайфстайл Креатор',
+    tags: ['Лайфстайл', 'Влоги', 'Мода & Стиль'],
+    quote1: 'Открыт для сотрудничества',
+    quote2: 'и медиа',
+    dm: 'В личку',
+    actionText: 'Написать',
+    shareTitle: 'Поделиться визиткой',
+    shareDesc: 'Дайте отсканировать QR-код или отправьте ссылку напрямую.',
+    copy: 'Копировать',
+    copied: 'Скопировано!',
+    send: 'Отправить'
+  },
+  AM: {
+    badge: 'Եթերում',
+    role: 'Լայֆսթայլ Քրիեյթոր',
+    tags: ['Լայֆսթայլ', 'Վլոգներ', 'Նորաձևություն և Ոճ'],
+    quote1: 'Բաց եմ համագործակցության',
+    quote2: 'և մեդիայի համար',
+    dm: 'Գրել DM',
+    actionText: 'Կապվել',
+    shareTitle: 'Կիսվել այցեքարտով',
+    shareDesc: 'Սքանավորեք QR կոդը կամ ուղարկեք հղումն անմիջապես։',
+    copy: 'Պատճենել',
+    copied: 'Պատճենված է',
+    send: 'Ուղարկել'
+  },
+  EN: {
+    badge: 'On Air',
+    role: 'Lifestyle Creator',
+    tags: ['Lifestyle', 'Vlogs', 'Fashion & Style'],
+    quote1: 'Open for collaborations',
+    quote2: 'and media inquiries',
+    dm: 'DM me',
+    actionText: 'Contact',
+    shareTitle: 'Share Card',
+    shareDesc: 'Let them scan the QR code or send the link directly.',
+    copy: 'Copy link',
+    copied: 'Copied!',
+    send: 'Send'
+  }
 };
 
 // ==========================================
@@ -115,51 +156,67 @@ const globalStyles = `
       spark-wander var(--wt) linear 0.8s forwards;
   }
   
-  /* Эффект сгорания бумаги */
-  @keyframes burn-mask-reveal {
-    0% { -webkit-mask-position: 100% 0%; mask-position: 100% 0%; }
-    100% { -webkit-mask-position: 0% 100%; mask-position: 0% 100%; }
+  /* Эффект сгорания бумаги - Оптимизация для мобильных (Safari) */
+  @media (min-width: 640px) {
+    @keyframes burn-mask-reveal {
+      0% { -webkit-mask-position: 100% 0%; mask-position: 100% 0%; }
+      100% { -webkit-mask-position: 0% 100%; mask-position: 0% 100%; }
+    }
+    @keyframes burn-fire-scan {
+      0% { background-position: 100% 0%; opacity: 0; }
+      5% { opacity: 1; }
+      95% { opacity: 1; }
+      100% { background-position: 0% 100%; opacity: 0; }
+    }
+    .smooth-mask-wipe {
+      -webkit-mask-image: linear-gradient(225deg, transparent 47%, rgba(0,0,0,0.6) 49%, black 51%);
+      mask-image: linear-gradient(225deg, transparent 47%, rgba(0,0,0,0.6) 49%, black 51%);
+      -webkit-mask-size: 300% 300%;
+      mask-size: 300% 300%;
+      -webkit-mask-position: 100% 0%;
+      mask-position: 100% 0%;
+      animation: burn-mask-reveal 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      will-change: mask-position, -webkit-mask-position;
+    }
+    .burn-fire-edge {
+      background: 
+        linear-gradient(224deg, 
+          transparent 48.5%, 
+          rgba(20, 5, 0, 0.95) 49%, 
+          var(--burn-c1) 49.5%, 
+          var(--burn-c2) 50%, 
+          var(--burn-c3) 50.2%,
+          transparent 51%
+        ),
+        linear-gradient(226deg, 
+          transparent 48.5%, 
+          rgba(20, 5, 0, 0.95) 49%, 
+          var(--burn-c1) 49.5%, 
+          var(--burn-c2) 50%, 
+          var(--burn-c3) 50.2%,
+          transparent 51%
+        );
+      background-size: 300% 300%;
+      background-position: 100% 0%;
+      mix-blend-mode: normal;
+      filter: drop-shadow(0 0 8px var(--burn-c2)) blur(0.5px);
+      animation: burn-fire-scan 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      will-change: background-position, opacity;
+    }
   }
-  @keyframes burn-fire-scan {
-    0% { background-position: 100% 0%; opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
-    100% { background-position: 0% 100%; opacity: 0; }
-  }
-  .smooth-mask-wipe {
-    -webkit-mask-image: linear-gradient(225deg, transparent 47%, rgba(0,0,0,0.6) 49%, black 51%);
-    mask-image: linear-gradient(225deg, transparent 47%, rgba(0,0,0,0.6) 49%, black 51%);
-    -webkit-mask-size: 300% 300%;
-    mask-size: 300% 300%;
-    -webkit-mask-position: 100% 0%;
-    mask-position: 100% 0%;
-    animation: burn-mask-reveal 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: mask-position, -webkit-mask-position;
-  }
-  .burn-fire-edge {
-    background: 
-      linear-gradient(224deg, 
-        transparent 48.5%, 
-        rgba(20, 5, 0, 0.95) 49%, 
-        var(--burn-c1) 49.5%, 
-        var(--burn-c2) 50%, 
-        var(--burn-c3) 50.2%,
-        transparent 51%
-      ),
-      linear-gradient(226deg, 
-        transparent 48.5%, 
-        rgba(20, 5, 0, 0.95) 49%, 
-        var(--burn-c1) 49.5%, 
-        var(--burn-c2) 50%, 
-        var(--burn-c3) 50.2%,
-        transparent 51%
-      );
-    background-size: 300% 300%;
-    background-position: 100% 0%;
-    mix-blend-mode: normal;
-    filter: drop-shadow(0 0 8px var(--burn-c2)) blur(0.5px);
-    animation: burn-fire-scan 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    will-change: background-position, opacity;
+
+  @media (max-width: 639px) {
+    @keyframes mobile-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .smooth-mask-wipe {
+      opacity: 0;
+      animation: mobile-fade-in 1.5s ease-out forwards;
+    }
+    .burn-fire-edge {
+      display: none;
+    }
   }
 `;
 
@@ -195,33 +252,35 @@ const BurnRevealImage = ({ src, className, style, imgClassName = "" }) => {
 // ==========================================
 // 🎥 КОМПОНЕНТ ВИЗИТКИ (БЛОГЕР)
 // ==========================================
-const BloggerCard = () => {
+const BloggerCard = ({ lang }) => {
+  const t = TRANSLATIONS[lang]; // Текущие переводы
+
   return (
     <>
       {/* ЛИЦЕВАЯ СТОРОНА */}
-      <div className="absolute inset-0 w-full h-full card-backface-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(236,72,153,0.4)] overflow-hidden bg-black text-white flex flex-col p-6 group-hover:shadow-[0_20px_80px_rgba(6,182,212,0.6)] transition-shadow duration-700">
-        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 opacity-80 mix-blend-screen"></div>
+      <div className="absolute inset-0 w-full h-full card-backface-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(236,72,153,0.4)] overflow-hidden bg-black text-white flex flex-col p-[clamp(1rem,6cqw,1.5rem)] group-hover:shadow-[0_20px_80px_rgba(6,182,212,0.6)] transition-shadow duration-700">
+        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500 via-purple-500 to-pink-500 opacity-80 mix-blend-normal sm:mix-blend-screen"></div>
         
         {/* Сгорающий фон (Розовый/Неоновый огонь) */}
-        <BurnRevealImage src={CONTENT.bgImage} className="opacity-60 mix-blend-luminosity" />
+        <BurnRevealImage src={CONTENT.bgImage} className="opacity-60 mix-blend-normal sm:mix-blend-luminosity" />
         
         <div className="relative z-10 flex flex-col h-full justify-between">
           <div className="flex justify-between items-start">
-            <div className="bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span className="text-xs font-bold tracking-wider uppercase">{CONTENT.badge}</span>
+            <div className="bg-[#151515]/95 sm:bg-black/40 sm:backdrop-blur-md px-[clamp(0.7rem,4cqw,1rem)] py-[clamp(0.35rem,2cqw,0.5rem)] rounded-full border border-white/20 flex items-center gap-[clamp(0.35rem,2cqw,0.5rem)]">
+              <span className="w-[clamp(0.35rem,2cqw,0.5rem)] h-[clamp(0.35rem,2cqw,0.5rem)] rounded-full bg-red-500 animate-pulse"></span>
+              <span className="text-[clamp(0.6rem,3cqw,0.75rem)] font-bold tracking-wider uppercase">{t.badge}</span>
             </div>
-            <Camera className="w-8 h-8 text-white/80" />
+            <Camera className="w-[clamp(1.5rem,8cqw,2rem)] h-[clamp(1.5rem,8cqw,2rem)] text-white/80" />
           </div>
 
           <div>
-            <h2 className="text-3xl sm:text-4xl leading-tight font-black mb-1 uppercase tracking-tighter mix-blend-overlay text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+            <h2 className="text-[clamp(1.75rem,8cqw,2.5rem)] leading-tight font-black mb-[clamp(0.15rem,1cqw,0.25rem)] uppercase tracking-tighter mix-blend-normal sm:mix-blend-overlay text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
               {CONTENT.name1}
               <br />
               {CONTENT.name2}
             </h2>
-            <p className="text-cyan-300 font-bold text-xs uppercase tracking-[0.2em] mt-2 border-l-2 border-pink-500 pl-3">
-              {CONTENT.role}
+            <p className="text-cyan-300 font-bold text-[clamp(0.6rem,3cqw,0.75rem)] uppercase tracking-[0.2em] mt-[clamp(0.35rem,2cqw,0.5rem)] border-l-2 border-pink-500 pl-[clamp(0.5rem,3cqw,0.75rem)]">
+              {t.role}
             </p>
           </div>
         </div>
@@ -232,83 +291,83 @@ const BloggerCard = () => {
         
         <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden pointer-events-none" style={{ transform: 'translateZ(0)' }}>
           {/* Глянцевые неоновые засветы */}
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-pink-500/30 blur-[80px] rounded-full mix-blend-screen"></div>
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500/30 blur-[80px] rounded-full mix-blend-screen"></div>
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-pink-500/30 blur-[80px] rounded-full mix-blend-normal sm:mix-blend-screen"></div>
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-cyan-500/30 blur-[80px] rounded-full mix-blend-normal sm:mix-blend-screen"></div>
         </div>
         
         {/* Вертикальная типографика */}
-        <div className="absolute left-0 top-0 bottom-0 w-[4.5rem] bg-zinc-900/80 backdrop-blur-md border-r border-zinc-800 flex items-center justify-center z-0 overflow-hidden rounded-l-[2.5rem]">
-          <h3 className="text-[5rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-400 to-pink-500 -rotate-90 whitespace-nowrap tracking-tighter mix-blend-screen opacity-50">
+        <div className="absolute left-0 top-0 bottom-0 w-[clamp(3rem,15cqw,4.5rem)] bg-[#151515]/95 sm:bg-zinc-900/80 sm:backdrop-blur-md border-r border-zinc-800 flex items-center justify-center z-0 overflow-hidden rounded-l-[2.5rem]">
+          <h3 className="text-[clamp(3.5rem,20cqw,5rem)] font-black text-transparent bg-clip-text bg-gradient-to-b from-cyan-400 to-pink-500 -rotate-90 whitespace-nowrap tracking-tighter mix-blend-normal sm:mix-blend-screen opacity-50">
             {CONTENT.name1}
           </h3>
         </div>
 
         {/* Основной контент */}
-        <div className="relative z-10 flex flex-col h-full w-full pl-[4.5rem] p-5">
+        <div className="relative z-10 flex flex-col h-full w-full pl-[clamp(3rem,15cqw,4.5rem)] p-[clamp(0.8rem,5cqw,1.25rem)]">
           
-          <div className="flex justify-between items-start mb-3">
-            <div className="flex flex-col mt-2">
-              <div className="flex flex-wrap gap-1.5 mb-1.5">
-                {CONTENT.tags && CONTENT.tags.map((tag, idx) => (
-                  <span key={idx} className="bg-cyan-400 text-black text-[7px] font-black uppercase tracking-[0.15em] px-1.5 py-0.5 transform -skew-x-12 shadow-[2px_2px_0px_#ec4899]">
+          <div className="flex justify-between items-start mb-[clamp(0.5rem,3cqw,0.75rem)]">
+            <div className="flex flex-col mt-[clamp(0.35rem,2cqw,0.5rem)]">
+              <div className="flex flex-wrap gap-[clamp(0.25rem,1.5cqw,0.375rem)] mb-[clamp(0.25rem,1.5cqw,0.375rem)]">
+                {t.tags && t.tags.map((tag, idx) => (
+                  <span key={idx} className="bg-cyan-400 text-black text-[clamp(0.3rem,1.5cqw,0.4375rem)] font-black uppercase tracking-[0.15em] px-[clamp(0.25rem,1.5cqw,0.375rem)] py-[clamp(0.1rem,0.5cqw,0.125rem)] transform -skew-x-12 shadow-[2px_2px_0px_#ec4899]">
                     {tag}
                   </span>
                 ))}
               </div>
-              <h3 className="text-xl font-black uppercase tracking-tighter leading-none text-white drop-shadow-[2px_2px_0px_#ec4899]">{CONTENT.username}</h3>
+              <h3 className="text-[clamp(1rem,5cqw,1.25rem)] font-black uppercase tracking-tighter leading-none text-white drop-shadow-[2px_2px_0px_#ec4899]">{CONTENT.username}</h3>
             </div>
             {/* Брутальный квадратный аватар */}
-            <div className="w-12 h-12 shrink-0 border-2 border-white shadow-[3px_3px_0px_#ec4899] transform rotate-3 bg-zinc-800 overflow-hidden ml-2">
+            <div className="w-[clamp(2rem,12cqw,3rem)] h-[clamp(2rem,12cqw,3rem)] shrink-0 border-2 border-white shadow-[3px_3px_0px_#ec4899] transform rotate-3 bg-zinc-800 overflow-hidden ml-[clamp(0.35rem,2cqw,0.5rem)]">
               <img src={CONTENT.avatar} alt={CONTENT.name1} className="w-full h-full object-cover grayscale contrast-125" />
             </div>
           </div>
           
           {/* Асимметричная статистика */}
-          <div className="flex flex-col gap-2.5 mt-1 mb-auto">
-            <a href={CONTENT.youtubeLink} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 border-2 border-zinc-800 p-2.5 flex justify-between items-center shadow-[4px_4px_0px_#22d3ee] transform -rotate-2 hover:rotate-0 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#22d3ee] transition-all group no-tilt" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center gap-2">
-                <Play className="w-4 h-4 text-cyan-400 fill-cyan-400 group-hover:scale-110 transition-transform" />
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">{CONTENT.stat1Title}</span>
+          <div className="flex flex-col gap-[clamp(0.45rem,2.5cqw,0.625rem)] mt-[clamp(0.15rem,1cqw,0.25rem)] mb-auto">
+            <a href={CONTENT.youtubeLink} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 border-2 border-zinc-800 p-[clamp(0.45rem,2.5cqw,0.625rem)] flex justify-between items-center shadow-[4px_4px_0px_#22d3ee] transform -rotate-2 hover:rotate-0 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#22d3ee] transition-all group no-tilt" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center gap-[clamp(0.35rem,2cqw,0.5rem)]">
+                <Play className="w-[clamp(0.7rem,4cqw,1rem)] h-[clamp(0.7rem,4cqw,1rem)] text-cyan-400 fill-cyan-400 group-hover:scale-110 transition-transform" />
+                <span className="text-[clamp(0.45rem,2cqw,0.5625rem)] font-bold text-zinc-500 uppercase tracking-widest">{CONTENT.stat1Title}</span>
               </div>
-              <span className="text-xl font-black text-white">{CONTENT.stat1Value}</span>
+              <span className="text-[clamp(1rem,6cqw,1.25rem)] font-black text-white">{CONTENT.stat1Value}</span>
             </a>
             
-            <a href={CONTENT.instLink} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 border-2 border-zinc-800 p-2.5 flex justify-between items-center shadow-[4px_4px_0px_#ec4899] transform rotate-1 hover:rotate-0 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#ec4899] transition-all ml-4 group no-tilt" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center gap-2">
-                <InstagramIcon className="w-4 h-4 text-pink-500 group-hover:scale-110 transition-transform" />
-                <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">{CONTENT.stat2Title}</span>
+            <a href={CONTENT.instLink} target="_blank" rel="noopener noreferrer" className="bg-zinc-900 border-2 border-zinc-800 p-[clamp(0.45rem,2.5cqw,0.625rem)] flex justify-between items-center shadow-[4px_4px_0px_#ec4899] transform rotate-1 hover:rotate-0 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#ec4899] transition-all ml-[clamp(0.7rem,4cqw,1rem)] group no-tilt" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center gap-[clamp(0.35rem,2cqw,0.5rem)]">
+                <InstagramIcon className="w-[clamp(0.7rem,4cqw,1rem)] h-[clamp(0.7rem,4cqw,1rem)] text-pink-500 group-hover:scale-110 transition-transform" />
+                <span className="text-[clamp(0.45rem,2cqw,0.5625rem)] font-bold text-zinc-500 uppercase tracking-widest">{CONTENT.stat2Title}</span>
               </div>
-              <span className="text-xl font-black text-white">{CONTENT.stat2Value}</span>
+              <span className="text-[clamp(1rem,6cqw,1.25rem)] font-black text-white">{CONTENT.stat2Value}</span>
             </a>
           </div>
 
           {/* Дерзкая цитата */}
-          <div className="mb-4 relative z-20">
-             <p className="font-black text-[11px] uppercase tracking-tighter leading-relaxed">
-               <span className="bg-white text-black px-1.5 py-0.5 box-decoration-clone">{CONTENT.quote1}</span>
+          <div className="mb-[clamp(0.7rem,4cqw,1rem)] relative z-20">
+             <p className="font-black text-[clamp(0.5rem,2.5cqw,0.6875rem)] uppercase tracking-tighter leading-relaxed">
+               <span className="bg-white text-black px-[clamp(0.25rem,1.5cqw,0.375rem)] py-[clamp(0.1rem,0.5cqw,0.125rem)] box-decoration-clone">{t.quote1}</span>
                <br/>
-               <span className="bg-pink-500 text-white px-1.5 py-0.5 box-decoration-clone inline-block mt-0.5 shadow-[2px_2px_0px_#22d3ee]">{CONTENT.quote2}</span>
+               <span className="bg-pink-500 text-white px-[clamp(0.25rem,1.5cqw,0.375rem)] py-[clamp(0.1rem,0.5cqw,0.125rem)] box-decoration-clone inline-block mt-[clamp(0.1rem,0.5cqw,0.125rem)] shadow-[2px_2px_0px_#22d3ee]">{t.quote2}</span>
              </p>
           </div>
 
           {/* Интерактивные кнопки */}
-          <div className="flex flex-col gap-2 relative z-20 no-tilt" onClick={e => e.stopPropagation()}>
-            <div className="flex gap-2">
-              <a href={CONTENT.tgChannelLink} target="_blank" rel="noopener noreferrer" className="flex-1 bg-zinc-900 border-2 border-zinc-700 py-2 flex items-center justify-center text-blue-400 shadow-[3px_3px_0px_#22d3ee] hover:bg-zinc-800 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all group">
-                <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          <div className="flex flex-col gap-[clamp(0.35rem,2cqw,0.5rem)] relative z-20 no-tilt" onClick={e => e.stopPropagation()}>
+            <div className="flex gap-[clamp(0.35rem,2cqw,0.5rem)]">
+              <a href={CONTENT.tgChannelLink} target="_blank" rel="noopener noreferrer" className="flex-1 bg-zinc-900 border-2 border-zinc-700 py-[clamp(0.35rem,2cqw,0.5rem)] flex items-center justify-center text-blue-400 shadow-[3px_3px_0px_#22d3ee] hover:bg-zinc-800 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all group">
+                <MessageCircle className="w-[clamp(0.7rem,4cqw,1rem)] h-[clamp(0.7rem,4cqw,1rem)] group-hover:scale-110 transition-transform" />
               </a>
-              <a href={CONTENT.tiktokLink} target="_blank" rel="noopener noreferrer" className="flex-1 bg-zinc-900 border-2 border-zinc-700 py-2 flex items-center justify-center text-white shadow-[3px_3px_0px_#ec4899] hover:bg-zinc-800 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all group">
-                <TikTokIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <a href={CONTENT.tiktokLink} target="_blank" rel="noopener noreferrer" className="flex-1 bg-zinc-900 border-2 border-zinc-700 py-[clamp(0.35rem,2cqw,0.5rem)] flex items-center justify-center text-white shadow-[3px_3px_0px_#ec4899] hover:bg-zinc-800 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all group">
+                <TikTokIcon className="w-[clamp(0.7rem,4cqw,1rem)] h-[clamp(0.7rem,4cqw,1rem)] group-hover:scale-110 transition-transform" />
               </a>
-              <a href={CONTENT.tgLink} className="flex-[2] bg-cyan-400 text-black font-black uppercase tracking-widest py-2 flex items-center justify-center gap-1.5 transition-all shadow-[3px_3px_0px_#ec4899] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none border-2 border-transparent hover:border-black text-[9px]">
-                <MessageCircle className="w-3.5 h-3.5" /> В личку
+              <a href={CONTENT.tgLink} className="flex-[2] bg-cyan-400 text-black font-black uppercase tracking-widest py-[clamp(0.35rem,2cqw,0.5rem)] flex items-center justify-center gap-[clamp(0.25rem,1.5cqw,0.375rem)] transition-all shadow-[3px_3px_0px_#ec4899] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none border-2 border-transparent hover:border-black text-[clamp(0.45rem,2cqw,0.5625rem)]">
+                <MessageCircle className="w-[clamp(0.6rem,3.5cqw,0.875rem)] h-[clamp(0.6rem,3.5cqw,0.875rem)]" /> {t.dm}
               </a>
             </div>
             
-            <a href={CONTENT.actionLink} className="w-full bg-white text-black font-black uppercase tracking-widest py-2.5 flex items-center justify-center gap-2 transition-all duration-200 shadow-[4px_4px_0px_#ec4899] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none border-2 border-transparent hover:border-black group relative overflow-hidden z-20">
+            <a href={CONTENT.actionLink} className="w-full bg-white text-black font-black uppercase tracking-widest py-[clamp(0.45rem,2.5cqw,0.625rem)] flex items-center justify-center gap-[clamp(0.35rem,2cqw,0.5rem)] transition-all duration-200 shadow-[4px_4px_0px_#ec4899] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none border-2 border-transparent hover:border-black group relative overflow-hidden z-20">
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-pink-500/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
-              <Mail className="w-4 h-4 relative z-10 text-pink-500" />
-              <span className="relative z-10 text-[10px]">{CONTENT.actionText}</span>
+              <Mail className="w-[clamp(0.7rem,4cqw,1rem)] h-[clamp(0.7rem,4cqw,1rem)] relative z-10 text-pink-500" />
+              <span className="relative z-10 text-[clamp(0.45rem,2.5cqw,0.625rem)]">{t.actionText}</span>
             </a>
           </div>
         </div>
@@ -333,6 +392,9 @@ const App = () => {
   const cardRef = useRef(null);
   const audioCtxRef = useRef(null);
   const isFlippingRef = useRef(false);
+
+  // Текущие переводы для модального окна Share
+  const t = TRANSLATIONS[lang];
 
   // Настройки цвета темы под блогера
   const glowColor = 'rgba(236,72,153,0.6)';
@@ -472,8 +534,8 @@ const App = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Моя цифровая визитка',
-          text: 'Привет! Вот моя визитка с контактами:',
+          title: t.shareTitle,
+          text: t.shareDesc,
           url: window.location.href,
         });
       } catch (err) {}
@@ -487,7 +549,7 @@ const App = () => {
       'BEGIN:VCARD',
       'VERSION:3.0',
       `FN:${CONTENT.name1} ${CONTENT.name2}`,
-      `TITLE:${CONTENT.role}`,
+      `TITLE:${t.role}`,
       `URL:${typeof window !== 'undefined' ? window.location.href : ''}`,
       'END:VCARD'
     ].filter(Boolean).join('\n');
@@ -509,22 +571,22 @@ const App = () => {
 
       {/* Параллакс (Тематические цвета блогера - Циан/Розовый) */}
       <div 
-        className="fixed top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none transition-transform duration-1000 ease-out"
+        className="hidden sm:block fixed top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none transition-transform duration-1000 ease-out"
         style={{ transform: `translate(${bgOffset.x}px, ${bgOffset.y}px)` }}
       ></div>
       <div 
-        className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none transition-transform duration-1000 ease-out"
+        className="hidden sm:block fixed bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-[120px] pointer-events-none transition-transform duration-1000 ease-out"
         style={{ transform: `translate(${bgOffset.x * 1.5}px, ${bgOffset.y * 1.5}px)` }}
       ></div>
 
       {/* Основной контейнер */}
-      <div className="w-full flex flex-col items-center relative z-40">
+      <div className="flex-1 w-full flex items-center justify-center min-h-0 relative z-40">
         
         {/* Карточка */}
         <div 
           ref={cardRef}
-          className="relative z-10 w-full aspect-[1/1.6] sm:aspect-[1/1.5] cursor-pointer group animate-float touch-none"
-          style={{ perspective: '1500px', maxWidth: 'min(22rem, 85vw, 55vh)' }}
+          className="relative z-10 w-full aspect-[1/1.6] sm:aspect-[1/1.5] cursor-pointer group animate-float touch-none @container"
+          style={{ perspective: '1500px', maxWidth: 'min(26rem, 94vw, 52dvh)' }}
           onClick={handleFlip}
           onMouseMove={handlePointerMove}
           onMouseLeave={handlePointerLeave}
@@ -572,24 +634,23 @@ const App = () => {
                 style={{ transform: 'rotateY(180deg)', boxShadow: `0 0 60px ${glowColor}` }} 
               />
 
-              <BloggerCard />
+              {/* Передаем выбранный язык внутрь визитки */}
+              <BloggerCard lang={lang} />
 
               <div 
-                className="absolute inset-0 w-full h-full rounded-[2.5rem] pointer-events-none transition-opacity duration-300 card-backface-hidden"
+                className="absolute inset-0 w-full h-full rounded-[2.5rem] pointer-events-none transition-opacity duration-300 card-backface-hidden mix-blend-normal sm:mix-blend-overlay"
                 style={{
                   background: `radial-gradient(farthest-corner circle at ${glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 80%)`,
                   opacity: glare.opacity,
-                  mixBlendMode: 'overlay',
                   zIndex: 50,
                 }}
               />
               <div 
-                className="absolute inset-0 w-full h-full rounded-[2.5rem] pointer-events-none transition-opacity duration-300 card-backface-hidden"
+                className="absolute inset-0 w-full h-full rounded-[2.5rem] pointer-events-none transition-opacity duration-300 card-backface-hidden mix-blend-normal sm:mix-blend-overlay"
                 style={{
                   transform: 'rotateY(180deg) translateZ(0)',
                   background: `radial-gradient(farthest-corner circle at ${100 - glare.x}% ${glare.y}%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 80%)`,
                   opacity: glare.opacity,
-                  mixBlendMode: 'overlay',
                   zIndex: 50,
                 }}
               />
@@ -598,13 +659,13 @@ const App = () => {
         </div>
 
         {/* ПАНЕЛЬ КНОПОК ПОД ВИЗИТКОЙ */}
-        <div className="mt-8 sm:mt-10 flex items-center gap-3 sm:gap-4 bg-white/5 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)] z-50 relative">
+        <div className="fixed bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 sm:gap-3 bg-[#181818]/95 sm:bg-white/5 sm:backdrop-blur-xl border border-white/10 p-1.5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
           <div className="flex items-center gap-0.5 px-1">
             {['RU', 'AM', 'EN'].map((l) => (
               <button
                 key={l}
                 onClick={() => setLang(l)}
-                className={`relative px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest transition-all duration-500 ${lang === l ? 'text-white' : 'text-white/40 hover:text-white/80'}`}
+                className={`relative px-2.5 py-1 rounded-full text-[9px] font-bold tracking-widest transition-all duration-500 ${lang === l ? 'text-white' : 'text-white/40 hover:text-white/80'}`}
               >
                 {lang === l && (
                   <span className="absolute inset-0 bg-white/10 border border-white/20 rounded-full shadow-[inset_0_0_8px_rgba(255,255,255,0.1)] pointer-events-none"></span>
@@ -614,16 +675,16 @@ const App = () => {
             ))}
           </div>
 
-          <div className="w-px h-6 bg-white/20 mx-1"></div>
+          <div className="w-px h-5 bg-white/20 mx-0.5"></div>
 
           <button
             onClick={() => {
               if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
               setShowShare(true);
             }}
-            className="p-2.5 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300"
+            className="p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300"
           >
-            <QrCode className="w-5 h-5" />
+            <QrCode className="w-4 h-4" />
           </button>
 
           <button
@@ -631,9 +692,9 @@ const App = () => {
               if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
               downloadVCard();
             }}
-            className="p-2.5 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300"
+            className="p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-300"
           >
-            <UserPlus className="w-5 h-5" />
+            <UserPlus className="w-4 h-4" />
           </button>
         </div>
 
@@ -642,11 +703,11 @@ const App = () => {
       {/* МОДАЛЬНОЕ ОКНО ПОДЕЛИТЬСЯ */}
       {showShare && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity animate-in fade-in duration-200" 
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#151515]/95 sm:bg-black/40 sm:backdrop-blur-sm transition-opacity animate-in fade-in duration-200" 
           onClick={() => setShowShare(false)}
         >
           <div 
-            className="backdrop-blur-3xl rounded-[2.5rem] p-6 sm:p-8 w-full max-w-sm flex flex-col items-center relative shadow-2xl animate-in zoom-in-95 duration-200 border" 
+            className="sm:backdrop-blur-3xl rounded-[2.5rem] p-6 sm:p-8 w-full max-w-sm flex flex-col items-center relative shadow-2xl animate-in zoom-in-95 duration-200 border" 
             style={{ backgroundColor: modalTheme.bg, borderColor: modalTheme.border }}
             onClick={e => e.stopPropagation()}
           >
@@ -661,8 +722,8 @@ const App = () => {
               <QrCode className={`w-6 h-6 ${modalTheme.icon}`} />
             </div>
             
-            <h3 className="text-xl font-bold text-white mb-2 tracking-wide">Поделиться визиткой</h3>
-            <p className="text-sm text-white/60 text-center mb-6 leading-relaxed">Дайте отсканировать QR-код или отправьте ссылку напрямую.</p>
+            <h3 className="text-xl font-bold text-white mb-2 tracking-wide">{t.shareTitle}</h3>
+            <p className="text-sm text-white/60 text-center mb-6 leading-relaxed">{t.shareDesc}</p>
             
             <div className="bg-white p-4 rounded-3xl mb-6 shadow-[0_0_40px_rgba(255,255,255,0.15)] flex items-center justify-center">
               <img 
@@ -678,14 +739,14 @@ const App = () => {
                 className="flex-1 bg-black/20 hover:bg-black/40 border border-white/10 text-white font-medium py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-sm"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                {copied ? 'Скопировано!' : 'Копировать'}
+                {copied ? t.copied : t.copy}
               </button>
               <button 
                 onClick={handleShare}
                 className="flex-1 bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 transition-colors text-sm"
               >
                 <Share2 className="w-4 h-4" />
-                Отправить
+                {t.send}
               </button>
             </div>
           </div>
